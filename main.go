@@ -15,6 +15,7 @@ func main() {
 	})
 	port := os.Getenv("PORT")
 	http.ListenAndServe(port, nil)
+	log.Println("listening at port:", port)
 	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
 	if err != nil {
 		log.Panic(err)
