@@ -1,12 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
+	"os"
 
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func main() {
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Fprintf(writer, "bot application")
+	})
+	port := os.Getenv("PORT")
+	http.ListenAndServe(port, nil)
 	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
 	if err != nil {
 		log.Panic(err)
