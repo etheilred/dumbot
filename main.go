@@ -1,11 +1,21 @@
 package main
 
 import (
+	"github.com/go-martini/martini"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 )
 
+func httpDaemon() {
+	m := martini.Classic()
+	m.Get("/", func() string {
+		return "Hello world!"
+	})
+	m.Run()
+}
+
 func main() {
+	go httpDaemon()
 	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
 	if err != nil {
 		log.Panic(err)
