@@ -6,6 +6,7 @@ import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"myProj5/pkg/utils"
+	"time"
 )
 
 var numOfUpdates = 0
@@ -15,8 +16,10 @@ var numOfCallbackQueries = 0
 func httpDaemon() {
 	m := martini.Classic()
 	m.Get("/", func() string {
+		reqTime := time.Now().Format("02-Jan-2006")
 		return fmt.Sprintf(
-			"<h1>Stats</h1>\nNumber of upds: %d<br/>\nNumber of msgs: %d<br/>\nNumber of callback queries: %d<br/>",
+			"<h1>Stats on %s</h1>\nNumber of upds: %d<br/>\nNumber of msgs: %d<br/>\nNumber of callback queries: %d<br/>",
+			reqTime,
 			numOfUpdates,
 			numOfMessages,
 			numOfCallbackQueries)
