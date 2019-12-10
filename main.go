@@ -72,24 +72,24 @@ func main() {
 		log.Fatal("Failed to get bot updates channel")
 	}
 	for update := range updates {
-		if update.Message == nil { // ignore any non-Message Updates
-			continue
-		}
-
-		log.Printf("[%s] %s, is command %b",
-			update.Message.From.UserName,
-			update.Message.Text,
-			update.Message.IsCommand(),
-		)
-
 		if update.CallbackQuery != nil {
-			log.Println("[CallbackData]", update.CallbackQuery.Data)
+			// log.Println("[CallbackData]", update.CallbackQuery.Data)
 			bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
 			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID,update.CallbackQuery.Data))
-		} else if update.Message.IsCommand() {
-			go handleCommands(bot, update)
-		} else {
-			go handleText(bot, update)
+		}
+		if update.Message != nil { // ignore any non-Message Updates
+
+			log.Printf("[%s] %s, is command %b",
+				update.Message.From.UserName,
+				update.Message.Text,
+				update.Message.IsCommand(),
+			)
+
+			if update.Message.IsCommand() {
+				go handleCommands(bot, update)
+			} else {
+				go handleText(bot, update)
+			}
 		}
 	}
 }
