@@ -16,7 +16,7 @@ func httpDaemon() {
 	m := martini.Classic()
 	m.Get("/", func() string {
 		return fmt.Sprintf(
-			"<h1>Stats</h1>\nNumber of upds: %d\nNumber of msgs: %d\nNumber of callback queries: %d",
+			"<h1>Stats</h1>\nNumber of upds: %d<br/>\nNumber of msgs: %d<br/>\nNumber of callback queries: %d<br/>",
 			numOfUpdates,
 			numOfMessages,
 			numOfCallbackQueries)
@@ -80,14 +80,18 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to get bot updates channel")
 	}
+
 	for update := range updates {
+		numOfUpdates++
 		if update.CallbackQuery != nil {
+			numOfCallbackQueries++
 			// log.Println("[CallbackData]", update.CallbackQuery.Data)
 			// bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
 			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data))
 		}
-		if update.Message != nil { // ignore any non-Message Updates
 
+		if update.Message != nil { // ignore any non-Message Updates
+			numOfMessages++
 			log.Printf("[%s] %s, is command %b",
 				update.Message.From.UserName,
 				update.Message.Text,
