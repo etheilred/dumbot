@@ -4,6 +4,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
+	"myProj5/pkg/utils"
 )
 
 func httpDaemon() {
@@ -14,11 +15,7 @@ func httpDaemon() {
 	m.Run()
 }
 
-type userPref struct {
-	ID int64
-}
-
-var users = make(map[int64]userPref)
+var users = make(map[int64]utils.UserPref)
 
 func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 	msg := tgbotapi.NewMessage(upd.Message.Chat.ID, "h")
@@ -28,7 +25,7 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 			msg.Text = "Here we go again..."
 		} else {
 			msg.Text = "Nice to meet you!"
-			usr = userPref{
+			usr = utils.UserPref{
 				ID: upd.Message.Chat.ID,
 			}
 			users[usr.ID] = usr
