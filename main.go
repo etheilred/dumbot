@@ -39,7 +39,9 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 		delete(users, upd.Message.Chat.ID)
 		msg.Text = "Wow, seems that I have forgotten yous"
 	}
-	msg.ReplyMarkup = users[upd.Message.Chat.ID].InlineKeyboard
+	if usr, ok := users[upd.Message.Chat.ID]; ok && usr.InlineKeyboard != nil {
+		msg.ReplyMarkup = users[upd.Message.Chat.ID].InlineKeyboard
+	}
 	bot.Send(msg)
 }
 
