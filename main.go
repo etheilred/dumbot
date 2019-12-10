@@ -34,6 +34,7 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 		delete(users, upd.Message.Chat.ID)
 		msg.Text = "Wow, seems that I have forgotten yous"
 	}
+	msg.ReplyMarkup = users[upd.Message.Chat.ID].Keyboard
 	bot.Send(msg)
 }
 
