@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
@@ -83,6 +84,9 @@ func main() {
 		)
 		if update.CallbackQuery != nil {
 			log.Println("[CallbackData]", update.CallbackQuery.Data)
+			bot.Send(
+				tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("done: %s", update.CallbackQuery.Data)),
+				)
 		} else if update.Message.IsCommand() {
 			go handleCommands(bot, update)
 		} else {
