@@ -21,8 +21,8 @@ type userPref struct {
 var users = make(map[int64]userPref)
 
 func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
-	msg := tgbotapi.NewMessage(upd.Message.Chat.ID, "")
-	if upd.Message.Text == "start" {
+	msg := tgbotapi.NewMessage(upd.Message.Chat.ID, "h")
+	if upd.Message.Text == "/start" {
 		usr, ok := users[upd.Message.Chat.ID]
 		if ok {
 			msg.Text = "Here we go again..."
@@ -33,7 +33,7 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 			}
 			users[usr.ID] = usr
 		}
-	} else if upd.Message.Text == "reset" {
+	} else if upd.Message.Text == "/reset" {
 		delete(users, upd.Message.Chat.ID)
 		msg.Text = "Wow, seems that I have forgotten yous"
 	}
