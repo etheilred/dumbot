@@ -1,16 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"myProj5/pkg/utils"
 )
 
+var numOfUpdates = 0
+var numOfMessages = 0
+var numOfCallbackQueries = 0
+
 func httpDaemon() {
 	m := martini.Classic()
 	m.Get("/", func() string {
-		return "Hello world!"
+		return fmt.Sprintf(
+			"<h1>Stats</h1>\nNumber of upds: %d\nNumber of msgs: %d\nNumber of callback queries: %d",
+			numOfUpdates,
+			numOfMessages,
+			numOfCallbackQueries)
 	})
 	m.Run()
 }
@@ -75,7 +84,7 @@ func main() {
 		if update.CallbackQuery != nil {
 			// log.Println("[CallbackData]", update.CallbackQuery.Data)
 			// bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
-			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID,update.CallbackQuery.Data))
+			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data))
 		}
 		if update.Message != nil { // ignore any non-Message Updates
 
