@@ -40,6 +40,16 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 	bot.Send(msg)
 }
 
+func handleText(bot *tgbotapi.BotAPI, update tgbotapi.Update)  {
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+	if update.Message.Text == "hello" {
+		msg.Text = "hi"
+	} else {
+		msg.Text = "((("
+	}
+	bot.Send(msg)
+}
+
 func main() {
 	go httpDaemon()
 	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
@@ -68,7 +78,9 @@ func main() {
 		)
 
 		if update.Message.IsCommand() {
-			handleCommands(bot, update)
+			go handleCommands(bot, update)
+		} else {
+			go handleText(bot, update)
 		}
 	}
 }
