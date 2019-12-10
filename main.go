@@ -28,13 +28,18 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 			usr = utils.UserPref{
 				ID: upd.Message.Chat.ID,
 			}
+			usr.SetInlineKeyboard(tgbotapi.NewInlineKeyboardRow(
+					tgbotapi.NewInlineKeyboardButtonData("press", "press"),
+					tgbotapi.NewInlineKeyboardButtonData("don't press", "nopress"),
+				),
+			)
 			users[usr.ID] = usr
 		}
 	} else if upd.Message.Text == "/reset" {
 		delete(users, upd.Message.Chat.ID)
 		msg.Text = "Wow, seems that I have forgotten yous"
 	}
-	msg.ReplyMarkup = users[upd.Message.Chat.ID].Keyboard
+	msg.ReplyMarkup = users[upd.Message.Chat.ID].InlineKeyboard
 	bot.Send(msg)
 }
 
