@@ -14,6 +14,32 @@ func httpDaemon() {
 	m.Run()
 }
 
+type userPref struct {
+	ID int64
+}
+
+var users = make(map[int64]userPref)
+
+func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
+	msg := tgbotapi.NewMessage(upd.Message.Chat.ID, "")
+	if upd.Message.Text == "start" {
+		usr, ok := users[upd.Message.Chat.ID]
+		if ok {
+			msg.Text = "Here we go again..."
+		} else {
+			msg.Text = "Nice to meet you!"
+			usr = userPref{
+				ID: upd.Message.Chat.ID,
+			}
+			users[usr.ID] = usr
+		}
+	} else if upd.Message.Text == "reset" {
+		delete(users, upd.Message.Chat.ID)
+		msg.Text = "Wow, seems that I have forgotten yous"
+	}
+	bot.Send(msg)
+}
+
 func main() {
 	go httpDaemon()
 	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
@@ -37,9 +63,8 @@ func main() {
 
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		msg.ReplyToMessageID = update.Message.MessageID
-
-		bot.Send(msg)
+		if update.Message.IsCommand() {
+			handleCommands(bot, update)
+		}
 	}
 }
