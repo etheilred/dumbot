@@ -74,7 +74,7 @@ func main() {
 	for update := range updates {
 		if update.CallbackQuery != nil {
 			// log.Println("[CallbackData]", update.CallbackQuery.Data)
-			bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
+			// bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
 			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID,update.CallbackQuery.Data))
 		}
 		if update.Message != nil { // ignore any non-Message Updates
