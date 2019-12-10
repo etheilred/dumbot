@@ -72,7 +72,9 @@ func main() {
 	u.Timeout = 60
 
 	updates, err := bot.GetUpdatesChan(u)
-
+	if err != nil {
+		log.Fatal("Failed to get bot updates channel")
+	}
 	for update := range updates {
 		if update.Message == nil { // ignore any non-Message Updates
 			continue
@@ -85,8 +87,7 @@ func main() {
 		)
 		if update.CallbackQuery != nil {
 			log.Println("[CallbackData]", update.CallbackQuery.Data)
-		}
-		if update.Message.IsCommand() {
+		} else if update.Message.IsCommand() {
 			go handleCommands(bot, update)
 		} else {
 			go handleText(bot, update)
