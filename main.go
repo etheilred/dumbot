@@ -79,7 +79,9 @@ func main() {
 			update.Message.Text,
 			update.Message.IsCommand(),
 		)
-
+		if update.CallbackQuery != nil {
+			log.Println("[CallbackData]", update.CallbackQuery.Data)
+		}
 		if update.Message.IsCommand() {
 			go handleCommands(bot, update)
 		} else {
