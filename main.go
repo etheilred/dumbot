@@ -84,10 +84,8 @@ func main() {
 
 		if update.CallbackQuery != nil {
 			log.Println("[CallbackData]", update.CallbackQuery.Data)
-			bot.AnswerCallbackQuery(tgbotapi.NewCallback(
-				update.CallbackQuery.ID, "Inline button was pressed!!!",
-			))
-			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, "DONE"))
+			bot.AnswerCallbackQuery(tgbotapi.NewCallback(update.CallbackQuery.ID,update.CallbackQuery.Data))
+			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID,update.CallbackQuery.Data))
 		} else if update.Message.IsCommand() {
 			go handleCommands(bot, update)
 		} else {
