@@ -16,7 +16,7 @@ var numOfCallbackQueries = 0
 func httpDaemon() {
 	m := martini.Classic()
 	m.Get("/", func() string {
-		reqTime := time.Now().Format("02-Jan-2006")
+		reqTime := time.Now().Format("2 Jan 2006 15:04:05")
 		return fmt.Sprintf(
 			"<h1>Stats on %s</h1>\nNumber of upds: %d<br/>\nNumber of msgs: %d<br/>\nNumber of callback queries: %d<br/>",
 			reqTime,
