@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
@@ -30,9 +29,9 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 				ID: upd.Message.Chat.ID,
 			}
 			usr.SetInlineKeyboard(tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonData("press", "press"),
-					tgbotapi.NewInlineKeyboardButtonData("don't press", "nopress"),
-				),
+				tgbotapi.NewInlineKeyboardButtonData("press", "press"),
+				tgbotapi.NewInlineKeyboardButtonData("don't press", "nopress"),
+			),
 			)
 			msg.ReplyMarkup = usr.InlineKeyboard
 			users[usr.ID] = usr
@@ -44,7 +43,7 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 	bot.Send(msg)
 }
 
-func handleText(bot *tgbotapi.BotAPI, update tgbotapi.Update)  {
+func handleText(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 	if update.Message.Text == "hello" {
 		msg.Text = "hi"
@@ -82,11 +81,13 @@ func main() {
 			update.Message.Text,
 			update.Message.IsCommand(),
 		)
+
 		if update.CallbackQuery != nil {
 			log.Println("[CallbackData]", update.CallbackQuery.Data)
-			bot.Send(
-				tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("done: %s", update.CallbackQuery.Data)),
-				)
+			bot.AnswerCallbackQuery(tgbotapi.NewCallback(
+				update.CallbackQuery.ID, "Inline button was pressed!!!",
+			))
+			bot.Send(tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, "DONE"))
 		} else if update.Message.IsCommand() {
 			go handleCommands(bot, update)
 		} else {
