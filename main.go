@@ -33,16 +33,12 @@ func handleCommands(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 					tgbotapi.NewInlineKeyboardButtonData("don't press", "nopress"),
 				),
 			)
+			msg.ReplyMarkup = usr.InlineKeyboard
 			users[usr.ID] = usr
 		}
 	} else if upd.Message.Text == "/reset" {
 		delete(users, upd.Message.Chat.ID)
 		msg.Text = "Wow, seems that I have forgotten yous"
-	}
-	if usr, ok := users[upd.Message.Chat.ID]; ok {
-		if usr.InlineKeyboard != nil {
-			msg.ReplyMarkup = *usr.InlineKeyboard
-		}
 	}
 	bot.Send(msg)
 }
