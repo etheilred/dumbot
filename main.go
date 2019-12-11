@@ -6,6 +6,7 @@ import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"myProj5/pkg/utils"
+	"os"
 	"time"
 )
 
@@ -67,7 +68,8 @@ func handleText(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
 func main() {
 	go httpDaemon()
-	bot, err := tgbotapi.NewBotAPI("1069764716:AAFkM-JdVVuA5nsh_gwhFGBO30Oc_kwjQVE")
+	token := os.Getenv("TOKEN")
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Panic(err)
 	}
